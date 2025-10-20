@@ -1,6 +1,30 @@
+@font-face {
+  font-family: 'iciel'; /* Bạn có thể đặt tên bất kỳ cho font */
+  src: url('iCielOutfitterScript.otf'); /* Đường dẫn tới tệp font của bạn */
+}
+
 body {
   margin: 0;
   overflow: hidden;
+  background-color: #fbf1f3;
+}
+
+/* Định dạng cho dòng chữ */
+#greeting-text {
+  position: absolute;
+  top: 48%; /* Điều chỉnh vị trí dọc */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10; /* Luôn nổi trên canvas */
+  
+  color: #ee5282; /* Màu giống trái tim */
+  font-family: 'iciel';
+  font-size: 3rem; /* Cỡ chữ */
+  text-align: center;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  
+  /* Trạng thái ban đầu: vô hình */
+  opacity: 0;
 }
 
 .controls {
