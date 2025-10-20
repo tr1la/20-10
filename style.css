@@ -42,3 +42,11 @@ svg {
   position: absolute;
   display: none;
 }
+@media (max-width: 600px) {
+  #greeting-text {
+    /* Sử dụng đơn vị vw để cỡ chữ tự điều chỉnh theo chiều rộng màn hình */
+    font-size: 5.8vw; 
+    /* Giảm bóng chữ để đỡ rối mắt */
+    text-shadow: none;
+  }
+}

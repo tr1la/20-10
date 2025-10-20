@@ -1,5 +1,8 @@
 console.clear();
 
+// ---- Responsive Setup ----
+const isMobile = window.innerWidth <= 600;
+
 /* SETUP */
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
@@ -8,7 +11,8 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   5000
 );
-camera.position.z = 500;
+// Nếu là mobile, đẩy camera ra xa hơn để nhìn được toàn cảnh
+camera.position.z = isMobile ? 800 : 500;
 
 const renderer = new THREE.WebGLRenderer({
   alpha: true
@@ -21,16 +25,17 @@ document.body.appendChild(renderer.domElement);
 const controlsWebGL = new THREE.OrbitControls(camera, renderer.domElement);
 
 /* PARTICLES HEART & TEXT TIMELINE */
-// Timeline này sẽ điều khiển cả trái tim và dòng chữ
 const tl = gsap.timeline({
   repeat: -1,
-  yoyo: true // Yoyo effect sẽ làm animation chạy ngược lại, khiến chữ mờ đi
+  yoyo: true
 });
 
 const path = document.querySelector("path");
 const length = path.getTotalLength();
 const vertices = [];
-for (let i = 0; i < length; i += 0.2) {
+// Giảm mật độ hạt trên mobile
+const particleStep = isMobile ? 0.6 : 0.2;
+for (let i = 0; i < length; i += particleStep) {
   const point = path.getPointAtLength(i);
   const vector = new THREE.Vector3(point.x, -point.y, 0);
   vector.x += (Math.random() - 0.5) * 30;
@@ -58,10 +63,7 @@ particles.position.x -= 600 / 2;
 particles.position.y += 552 / 2;
 scene.add(particles);
 
-// QUAN TRỌNG: Thêm hiệu ứng cho chữ vào cùng timeline với trái tim
-// Chữ sẽ hiện lên trong 4 giây, bắt đầu từ đầu timeline
 tl.to("#greeting-text", { opacity: 1, duration: 15 }, 0);
-
 
 gsap.fromTo(scene.rotation, {
   y: -0.2
@@ -136,22 +138,25 @@ function createRose() {
 }
 
 const flowers = [];
-const heartSafeZoneWidth = 450;
-const numFlowers = 35;
+// Giảm số lượng hoa trên mobile
+const numFlowers = isMobile ? 15 : 35;
+const heartSafeZoneWidth = isMobile ? 250 : 450;
+const flowerScale = isMobile ? 0.6 : 0.8;
 
 for (let i = 0; i < numFlowers; i++) {
     const flower = createRose();
     
     let x;
     const side = Math.random() > 0.5 ? 1 : -1;
-    x = side * (heartSafeZoneWidth / 2 + Math.random() * (window.innerWidth / 3));
+    x = side * (heartSafeZoneWidth / 2 + Math.random() * (window.innerWidth / 4));
     
     const y = -window.innerHeight / 2 - 150;
     const z = (Math.random() - 0.5) * 400;
 
     flower.position.set(x, y, z);
     flower.rotation.z = (Math.random() - 0.5) * 0.4;
-    flower.scale.set(0.8, 0.8, 0.8);
+    // Làm hoa nhỏ hơn trên mobile
+    flower.scale.set(flowerScale, flowerScale, flowerScale);
     
     scene.add(flower);
     flowers.push(flower);
